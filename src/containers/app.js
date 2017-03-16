@@ -23,6 +23,7 @@ class App extends Component {
     state: {
         blur: number,
     };
+
     updateBlur: (e: Event) => void;
 
     constructor() {
