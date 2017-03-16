@@ -1,21 +1,22 @@
+// @flow
 const fs = require('fs');
 const path = require('path');
 const { send } = require('micro');
 const { renderToString } = require('react-dom/server');
 const { createElement } = require('react');
 const { styleSheet } = require('styled-components');
-const App = require('./dist/app');
+const App = require('./containers/app');
 
-function readFile(file) {
+function readFile(file: string): Promise<string> {
     return new Promise(function(resolve, reject) {
-        fs.readFile(file, (err, data) => {
+        fs.readFile(file, 'utf-8', (err, data) => {
             if (err) reject(err);
             resolve(data);
         });
     });
 }
 
-function HTML(app, styles) {
+function HTML(app: string, styles: string): string {
     return `<!DOCTYPE html>
             <html lang="en">
             <head>
@@ -34,11 +35,15 @@ function HTML(app, styles) {
     `;
 }
 
-module.exports = async (req, res) => {
+type Request = {
+  url: string;
+};
+
+module.exports = async (req : Request, res: Object) => {
     console.log(`>> Requesting ${req.url}`);
 
     if (req.url === '/client.js') {
-        const data = await readFile(path.join(__dirname, 'dist/client.js'));
+        const data = await readFile(path.join(__dirname, 'client.js'));
         send(res, 200, data);
     } else {
         const html = renderToString(createElement(App));
