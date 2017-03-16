@@ -1,3 +1,4 @@
+// @flow
 import React, { Component } from 'react';
 import styled, { injectGlobal } from 'styled-components';
 
@@ -18,6 +19,12 @@ injectGlobal`
 `;
 
 class App extends Component {
+
+    state: {
+        blur: number,
+    };
+    updateBlur: (e: Event) => void;
+
     constructor() {
         super();
 
@@ -28,17 +35,16 @@ class App extends Component {
         this.updateBlur = this.updateBlur.bind(this);
     }
 
-    componentDidMount() {
-    }
-
-    updateBlur(e) {
-        const blur = e.target.value;
-        this.setState(state => {
-            return {
-                ...state,
-                blur,
-            };
-        });
+    updateBlur(e: Event): void {
+        if (e.target instanceof HTMLInputElement) {
+            const blur = e.target.value;
+            this.setState(state => {
+                return {
+                    ...state,
+                    blur,
+                };
+            });
+        }
     }
 
     render() {

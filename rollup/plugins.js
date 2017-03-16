@@ -42,6 +42,7 @@ export default [
             'external-helpers',
             'styled-components',
             'transform-object-rest-spread',
+            'transform-flow-strip-types',
         ],
     }),
     productionPlugins,
