@@ -39,7 +39,7 @@ type Request = {
   url: string;
 };
 
-module.exports = async (req : Request, res: Object) => {
+module.exports = async (req : http$IncomingMessage, res: Object) => {
     console.log(`>> Requesting ${req.url}`);
 
     if (req.url === '/client.js') {
