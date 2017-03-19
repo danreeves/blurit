@@ -4,6 +4,7 @@ import styled, { injectGlobal } from 'styled-components';
 
 import Border from '../components/border';
 import Slider from '../components/slider';
+import ImagePicker from '../components/imagepicker';
 
 injectGlobal`
     * {
@@ -19,21 +20,23 @@ injectGlobal`
 `;
 
 class App extends Component {
-
     state: {
         blur: number,
+        imageData: ?string,
     };
-
     updateBlur: (e: Event) => void;
+    getImage: (e: Event) => void;
 
     constructor() {
         super();
 
         this.state = {
             blur: 50,
+            imageData: undefined,
         };
 
         this.updateBlur = this.updateBlur.bind(this);
+        this.getImage = this.getImage.bind(this);
     }
 
     updateBlur(e: Event): void {
@@ -48,12 +51,27 @@ class App extends Component {
         }
     }
 
+    getImage(e: SyntheticInputEvent) {
+        const file = e.target.files[0];
+        const reader = new FileReader();
+        reader.onload = e => {
+            const imageData = e.target.result;
+            this.setState(state => {
+                return {
+                    ...state,
+                    imageData,
+                };
+            });
+        };
+        reader.readAsDataURL(file);
+    }
+
     render() {
-        const { blur } = this.state;
+        const { blur, imageData } = this.state;
         return (
             <Border>
-                <canvas />
-                <input type="file" name="file" />
+                <ImagePicker onChange={this.getImage} />
+                {(imageData) ? <img src={imageData} /> : undefined}
                 <Slider
                     type="range"
                     min="0"

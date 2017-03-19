@@ -1,13 +1,14 @@
 import styled from 'styled-components';
+import {
+    colour1 as gradientStart,
+    colour2 as gradientEnd,
+} from '../consts/theme';
 
 const thumbSize = 46;
 const thumbBorder = 2;
 const trackHeight = 10;
 const trackBorder = 2;
-const thumbOffset = 0 - (thumbSize / 2) + (trackHeight / 2) - trackBorder;
-
-const gradientStart = '#3acfd5';
-const gradientEnd = '#3a4ed5';
+const thumbOffset = 0 - thumbSize / 2 + trackHeight / 2 - trackBorder;
 
 const Slider = styled.input`
     -webkit-appearance: none; /* Hides the slider so that custom slider can be made */
@@ -33,19 +34,29 @@ const Slider = styled.input`
         -webkit-appearance: none;
         height: ${thumbSize}px;
         width: ${thumbSize}px;
-        border-radius: ${thumbSize}px;
         background: transparent;
         border: ${thumbBorder}px solid #3acfd5;
         cursor: pointer;
         border-image: linear-gradient(to bottom right, ${gradientStart} 0%, ${gradientEnd} 100%);
         border-image-slice: 1;
+        transition: filter .25s;
     }
+
+
+    &:focus::-webkit-slider-thumb,
+    &:active::-webkit-slider-thumb,
+    &:hover::-webkit-slider-thumb {
+        /* box-shadow: 0 0 10px ${gradientStart}; */
+
+        filter: blur(2.5px);
+    }
+
+
     &::-moz-range-thumb {
         margin-top: ${thumbOffset}px;
         -webkit-appearance: none;
         height: ${thumbSize}px;
         width: ${thumbSize}px;
-        border-radius: ${thumbSize}px;
         background: transparent;
         border: ${thumbBorder}px solid #3acfd5;
         cursor: pointer;
@@ -57,7 +68,6 @@ const Slider = styled.input`
         -webkit-appearance: none;
         height: ${thumbSize}px;
         width: ${thumbSize}px;
-        border-radius: ${thumbSize}px;
         background: transparent;
         border: ${thumbBorder}px solid #3acfd5;
         cursor: pointer;

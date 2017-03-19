@@ -36,10 +36,10 @@ function HTML(app: string, styles: string): string {
 }
 
 type Request = {
-  url: string;
+    url: string,
 };
 
-module.exports = async (req : http$IncomingMessage, res: Object) => {
+module.exports = async (req: http$IncomingMessage, res: Object) => {
     console.log(`>> Requesting ${req.url}`);
 
     if (req.url === '/client.js') {
