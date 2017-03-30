@@ -1,16 +1,17 @@
 // @flow
 import React, { Component } from 'react';
-import styled, { injectGlobal } from 'styled-components';
+import { injectGlobal } from 'styled-components';
 
 import Border from '../components/border';
 import Slider from '../components/slider';
 import ImagePicker from '../components/imagepicker';
+import Img from '../components/image';
 
 injectGlobal`
     * {
         box-sizing: border-box;
     }
-    html, body, #app {
+    html, body, #app, #innerapp {
         margin: 0;
         padding: 0;
         height: 100%;
@@ -31,7 +32,7 @@ class App extends Component {
         super();
 
         this.state = {
-            blur: 50,
+            blur: 5,
             imageData: undefined,
         };
 
@@ -52,10 +53,8 @@ class App extends Component {
     }
 
     getImage(e: SyntheticInputEvent) {
-        const file = e.target.files[0];
-        const reader = new FileReader();
-        reader.onload = e => {
-            const imageData = e.target.result;
+        const imageData = new Image();
+        imageData.onload = () => {
             this.setState(state => {
                 return {
                     ...state,
@@ -63,25 +62,35 @@ class App extends Component {
                 };
             });
         };
-        reader.readAsDataURL(file);
+        imageData.src = URL.createObjectURL(e.target.files[0]);
     }
 
     render() {
         const { blur, imageData } = this.state;
+        const haveImage = Boolean(imageData);
+        const handleImagePicker = this.getImage;
+        const handleUpdatingBlur = this.updateBlur;
         return (
-            <Border>
-                <ImagePicker onChange={this.getImage} />
-                {(imageData) ? <img src={imageData} /> : undefined}
-                <Slider
-                    type="range"
-                    min="0"
-                    max="100"
-                    step="1"
-                    defaultValue={blur}
-                    onChange={this.updateBlur}
-                    blur={blur}
-                />
-            </Border>
+            <div id="innerapp">
+                {imageData ? <Img src={imageData} blur={blur} /> : undefined}
+                <Border>
+                    <ImagePicker
+                        haveImage={haveImage}
+                        onChange={handleImagePicker}
+                    />
+                    <Slider
+                        type="range"
+                        min="0"
+                        max="50"
+                        step="1"
+                        defaultValue={blur}
+                        blur={blur}
+                        haveImage={haveImage}
+                        aria-hidden={!haveImage}
+                        onChange={handleUpdatingBlur}
+                    />
+                </Border>
+            </div>
         );
     }
 }

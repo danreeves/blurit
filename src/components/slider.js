@@ -11,6 +11,19 @@ const trackBorder = 2;
 const thumbOffset = 0 - thumbSize / 2 + trackHeight / 2 - trackBorder;
 
 const Slider = styled.input`
+
+    transition: filter .5s linear, opacity .5s linear;
+    opacity: 1;
+    ${props => {
+        if (!props.haveImage) {
+            return `
+                filter: blur(100px);
+                opacity: 0;
+                pointer-events: none;
+            `;
+        }
+    }}
+
     -webkit-appearance: none; /* Hides the slider so that custom slider can be made */
     background: transparent; /* Otherwise white in Chrome */
 

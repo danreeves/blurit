@@ -22,7 +22,7 @@ const Label = styled.label`
         width: 40%;
         display: block;
         margin: auto;
-        padding-left: 4%;
+        transform: translateX(7.5%);
     }
 `;
 

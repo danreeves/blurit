@@ -1,4 +1,6 @@
-// @flow
+/* @flow */
+/* eslint-env node */
+/* global http$IncomingMessage */
 const fs = require('fs');
 const path = require('path');
 const { send } = require('micro');
@@ -8,15 +10,17 @@ const { styleSheet } = require('styled-components');
 const App = require('./containers/app');
 
 function readFile(file: string): Promise<string> {
-    return new Promise(function(resolve, reject) {
+    return new Promise((resolve, reject) => {
         fs.readFile(file, 'utf-8', (err, data) => {
-            if (err) reject(err);
+            if (err) {
+                reject(err);
+            }
             resolve(data);
         });
     });
 }
 
-function HTML(app: string, styles: string): string {
+function makePage(app: string, styles: string): string {
     return `<!DOCTYPE html>
             <html lang="en">
             <head>
@@ -35,10 +39,6 @@ function HTML(app: string, styles: string): string {
     `;
 }
 
-type Request = {
-    url: string,
-};
-
 module.exports = async (req: http$IncomingMessage, res: Object) => {
     console.log(`>> Requesting ${req.url}`);
 
@@ -48,7 +48,7 @@ module.exports = async (req: http$IncomingMessage, res: Object) => {
     } else {
         const html = renderToString(createElement(App));
         const css = styleSheet.getCSS();
-        send(res, 200, HTML(html, css));
+        send(res, 200, makePage(html, css));
     }
 };
 
