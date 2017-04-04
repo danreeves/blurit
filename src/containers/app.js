@@ -1,4 +1,5 @@
-// @flow
+/* @flow */
+/* global SyntheticInputEvent */
 import React, { Component } from 'react';
 import { injectGlobal } from 'styled-components';
 
@@ -7,6 +8,7 @@ import Slider from '../components/slider';
 import ImagePicker from '../components/imagepicker';
 import Img from '../components/image';
 
+/* eslint-disable no-unused-expressions */
 injectGlobal`
     * {
         box-sizing: border-box;
@@ -19,12 +21,15 @@ injectGlobal`
         overflow: hidden;
     }
 `;
+/* eslint-enable */
+
+type State = {
+    blur: number,
+    imageData: ?string,
+};
 
 class App extends Component {
-    state: {
-        blur: number,
-        imageData: ?string,
-    };
+    state: State;
     updateBlur: (e: Event) => void;
     getImage: (e: Event) => void;
 

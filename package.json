@@ -68,13 +68,13 @@
     "extends": [
       "xo-react",
       "prettier",
-      "prettier/flowtype",
-      "prettier/react"
+      "prettier/react",
+      "prettier/flowtype"
     ],
     "plugins": [
       "prettier",
-      "flowtype",
-      "react"
+      "react",
+      "flowtype"
     ]
   }
 }

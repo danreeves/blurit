@@ -17,7 +17,7 @@ const Slider = styled.input`
     ${props => {
         if (!props.haveImage) {
             return `
-                filter: blur(100px);
+                filter: blur(20px);
                 opacity: 0;
                 pointer-events: none;
             `;
@@ -39,7 +39,7 @@ const Slider = styled.input`
     width: calc(95%);
 
     &:focus {
-        outline: none; /* Removes the blue border. You should probably do some kind of focus styling for accessibility reasons though. */
+        outline: none;
     }
 
     &::-webkit-slider-thumb {
@@ -53,15 +53,14 @@ const Slider = styled.input`
         border-image: linear-gradient(to bottom right, ${gradientStart} 0%, ${gradientEnd} 100%);
         border-image-slice: 1;
         transition: filter .25s;
+        filter: blur(2.5px);
     }
 
 
     &:focus::-webkit-slider-thumb,
     &:active::-webkit-slider-thumb,
     &:hover::-webkit-slider-thumb {
-        /* box-shadow: 0 0 10px ${gradientStart}; */
-
-        filter: blur(2.5px);
+        filter: blur(0);
     }
 
 
@@ -96,7 +95,17 @@ const Slider = styled.input`
         border: ${trackBorder}px solid #3acfd5;
         border-image: linear-gradient(to bottom right, ${gradientStart} 0%, ${gradientEnd} 100%);
         border-image-slice: 1;
+
+        transition: filter .25s;
+        filter: blur(2.5px);
     }
+
+    &:focus::-webkit-slider-runnable-track,
+    &:active::-webkit-slider-runnable-track,
+    &:hover::-webkit-slider-runnable-track {
+        filter: blur(0);
+    }
+
     &::-moz-range-track {
         width: 100%;
         height: ${trackHeight}px;

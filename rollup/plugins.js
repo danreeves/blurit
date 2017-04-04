@@ -10,20 +10,6 @@ const ENV = process.env.ENV || 'production';
 const productionPlugins = conditional(ENV === 'production', [uglify()]);
 
 export default [
-    replace({
-        'process.env.NODE_ENV': JSON.stringify(ENV),
-    }),
-    resolve(),
-    commonjs({
-        namedExports: {
-            'node_modules/react/react.js': [
-                'PropTypes',
-                'createElement',
-                'Component',
-            ],
-            'node_modules/chroma-js/chroma.js': ['chroma'],
-        },
-    }),
     babel({
         exclude: 'node_modules/**',
         presets: [
@@ -44,6 +30,19 @@ export default [
             'transform-object-rest-spread',
             'transform-flow-strip-types',
         ],
+    }),
+    replace({
+        'process.env.NODE_ENV': JSON.stringify(ENV),
+    }),
+    resolve(),
+    commonjs({
+        namedExports: {
+            'node_modules/react/react.js': [
+                'PropTypes',
+                'createElement',
+                'Component',
+            ],
+        },
     }),
     productionPlugins,
     filesize(),
