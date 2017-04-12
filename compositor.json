@@ -69,7 +69,8 @@
           "repo": "blurit"
         }
       ],
-      "text": "v1.0.0"
+      "text": "v1.0.0",
+      "slug": ""
     },
     {
       "component": "footer",
