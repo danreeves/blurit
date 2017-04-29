@@ -37,7 +37,7 @@ export default [
     resolve(),
     commonjs({
         namedExports: {
-            'node_modules/react/react.js': [
+            'react': [
                 'PropTypes',
                 'createElement',
                 'Component',

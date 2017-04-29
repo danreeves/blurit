@@ -6,7 +6,7 @@ const path = require('path');
 const { send } = require('micro');
 const { renderToString } = require('react-dom/server');
 const { createElement } = require('react');
-const { styleSheet } = require('styled-components');
+const { ServerStyleSheet } = require('styled-components');
 const App = require('./containers/app');
 
 function readFile(file: string): Promise<string> {
@@ -29,7 +29,7 @@ function makePage(app: string, styles: string): string {
                 <link rel="manifest" href="manifest.json">
                 <meta name="mobile-web-app-capable" content="yes">
                 <title>BlurIt</title>
-                <style id="ssr-styles">${styles}</style>
+                ${styles}
             </head>
             <body>
                 <div id="app">${app}</div>
@@ -46,8 +46,9 @@ module.exports = async (req: http$IncomingMessage, res: Object) => {
         const data = await readFile(path.join(__dirname, 'client.js'));
         send(res, 200, data);
     } else {
+        const sheet = new ServerStyleSheet();
         const html = renderToString(createElement(App));
-        const css = styleSheet.getCSS();
+        const css = sheet.getStyleTags();
         send(res, 200, makePage(html, css));
     }
 };

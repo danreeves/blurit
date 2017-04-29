@@ -49,14 +49,20 @@ class Img extends Component {
     }
 
     getContext(canvas) {
-        this.canvas = canvas;
-        doBlur(this.canvas, this.props.src, this.props.blur);
+        if (canvas) {
+            this.canvas = canvas;
+            doBlur(this.canvas, this.props.src, this.props.blur);
+        }
     }
 
     componentDidUpdate() {
         if (this.canvas) {
             doBlur(this.canvas, this.props.src, this.props.blur);
         }
+    }
+
+    componentWillUnmount() {
+        this.canvas = false;
     }
 
     render() {

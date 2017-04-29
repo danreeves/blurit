@@ -28,11 +28,10 @@ const Slider = styled.input`
     background: transparent; /* Otherwise white in Chrome */
 
     display: block;
-    position: absolute;
-    margin: 0;
+    position: relative;
+    margin: ${thumbSize/2}px 0;
     padding: 0;
 
-    bottom: ${thumbSize}px;
     left: 50%;
     transform: translateX(-50%);
 

@@ -1,12 +1,13 @@
 /* @flow */
-/* global SyntheticInputEvent */
 import React, { Component } from 'react';
 import { injectGlobal } from 'styled-components';
 
 import Border from '../components/border';
 import Slider from '../components/slider';
 import ImagePicker from '../components/imagepicker';
+import Controls from '../components/controls';
 import Img from '../components/image';
+import Reset from '../components/reset';
 
 /* eslint-disable no-unused-expressions */
 injectGlobal`
@@ -28,21 +29,25 @@ type State = {
     imageData: ?string,
 };
 
+const defaultState: State = {
+    blur: 5,
+    imageData: undefined,
+};
+
 class App extends Component {
     state: State;
     updateBlur: (e: Event) => void;
     getImage: (e: Event) => void;
+    reset: (e: Event) => void;
 
     constructor() {
         super();
 
-        this.state = {
-            blur: 5,
-            imageData: undefined,
-        };
+        this.state = defaultState;
 
         this.updateBlur = this.updateBlur.bind(this);
         this.getImage = this.getImage.bind(this);
+        this.reset = this.reset.bind(this);
     }
 
     updateBlur(e: Event): void {
@@ -68,6 +73,13 @@ class App extends Component {
             });
         };
         imageData.src = URL.createObjectURL(e.target.files[0]);
+        e.target.value = ''; // Unset the file input
+    }
+
+    reset(e: SyntheticInputEvent) {
+        this.setState(state => {
+            return defaultState;
+        });
     }
 
     render() {
@@ -75,25 +87,31 @@ class App extends Component {
         const haveImage = Boolean(imageData);
         const handleImagePicker = this.getImage;
         const handleUpdatingBlur = this.updateBlur;
+        const reset = this.reset;
         return (
             <div id="innerapp">
-                {imageData ? <Img src={imageData} blur={blur} /> : undefined}
+                {haveImage ? <Img src={imageData} blur={blur} /> : undefined}
                 <Border>
                     <ImagePicker
                         haveImage={haveImage}
                         onChange={handleImagePicker}
                     />
-                    <Slider
-                        type="range"
-                        min="0"
-                        max="50"
-                        step="1"
-                        defaultValue={blur}
-                        blur={blur}
-                        haveImage={haveImage}
-                        aria-hidden={!haveImage}
-                        onChange={handleUpdatingBlur}
-                    />
+                    <Controls>
+                        <Slider
+                            type="range"
+                            min="0"
+                            max="50"
+                            step="1"
+                            value={blur}
+                            blur={blur}
+                            haveImage={haveImage}
+                            aria-hidden={!haveImage}
+                            onChange={handleUpdatingBlur}
+                        />
+                        {imageData
+                            ? <Reset onClick={reset} />
+                            : undefined}
+                    </Controls>
                 </Border>
             </div>
         );
