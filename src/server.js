@@ -4,10 +4,12 @@
 const fs = require('fs');
 const path = require('path');
 const { send } = require('micro');
+const compress = require('micro-compress');
 const { renderToString } = require('react-dom/server');
 const { createElement } = require('react');
 const { ServerStyleSheet } = require('styled-components');
 const App = require('./containers/app');
+
 
 function readFile(file: string): Promise<string> {
     return new Promise((resolve, reject) => {
@@ -39,7 +41,7 @@ function makePage(app: string, styles: string): string {
     `;
 }
 
-module.exports = async (req: http$IncomingMessage, res: Object) => {
+module.exports = compress(async (req: http$IncomingMessage, res: Object) => {
     console.log(`>> Requesting ${req.url}`);
 
     if (req.url === '/client.js') {
@@ -54,6 +56,6 @@ module.exports = async (req: http$IncomingMessage, res: Object) => {
         const css = sheet.getStyleTags();
         send(res, 200, makePage(html, css));
     }
-};
+});
 
 console.log('> starting server');

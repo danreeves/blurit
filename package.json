@@ -10,7 +10,7 @@
     "dev": "npm run dev:app & npm run dev:client & npm run dev:server",
     "dev:app": "rollup -c rollup/rollup.app.js --environment ENV:development --watch",
     "dev:client": "rollup -c rollup/rollup.client.js --environment ENV:development --watch",
-    "dev:server": "nodemon --watch dist/containers --watch src/server.js --exec 'flow-remove-types src/server.js > dist/server.js && micro dist/server.js'"
+    "dev:server": "nodemon --watch dist/containers --watch src/server.js --exec 'flow-remove-types src/server.js > dist/server.js && micro dist/server.js' -s"
   },
   "repository": {
     "type": "git",
@@ -25,6 +25,7 @@
   "dependencies": {
     "downloadjs": "^1.4.7",
     "micro": "7.3.2",
+    "micro-compress": "^1.0.0",
     "react": "^16.0.0-alpha.11",
     "react-dom": "^16.0.0-alpha.11",
     "stackblur-canvas": "^1.4.0",
