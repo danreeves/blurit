@@ -4,9 +4,10 @@
   "description": "",
   "scripts": {
     "start": "micro dist/server.js",
-    "build": "npm run build:app & npm run build:client",
+    "build": "npm run build:app & npm run build:client & npm run build:server",
     "build:app": "rollup -c rollup/rollup.app.js --environment ENV:production",
     "build:client": "rollup -c rollup/rollup.client.js --environment ENV:production",
+    "build:server": "flow-remove-types src/server.js > dist/server.js",
     "dev": "npm run dev:app & npm run dev:client & npm run dev:server",
     "dev:app": "rollup -c rollup/rollup.app.js --environment ENV:development --watch",
     "dev:client": "rollup -c rollup/rollup.client.js --environment ENV:development --watch",
