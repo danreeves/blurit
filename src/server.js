@@ -45,6 +45,9 @@ module.exports = async (req: http$IncomingMessage, res: Object) => {
     if (req.url === '/client.js') {
         const data = await readFile(path.join(__dirname, 'client.js'));
         send(res, 200, data);
+    } else if (req.url === '/client.js.map') {
+        const data = await readFile(path.join(__dirname, 'client.js.map'));
+        send(res, 200, data);
     } else {
         const sheet = new ServerStyleSheet();
         const html = renderToString(createElement(App));

@@ -51,8 +51,16 @@ class Img extends Component {
     getContext(canvas) {
         if (canvas) {
             this.canvas = canvas;
+            this.props.getCanvas(canvas); // Pass the canvas up to parent state
             doBlur(this.canvas, this.props.src, this.props.blur);
         }
+    }
+
+    shouldComponentUpdate(nextProps) {
+        if (this.props.blur !== nextProps.blur) {
+            return true;
+        }
+        return false;
     }
 
     componentDidUpdate() {

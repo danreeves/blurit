@@ -1,13 +1,14 @@
 /* @flow */
 import React, { Component } from 'react';
 import { injectGlobal } from 'styled-components';
+import download from 'downloadjs';
 
 import Border from '../components/border';
 import Slider from '../components/slider';
 import ImagePicker from '../components/imagepicker';
 import Controls from '../components/controls';
 import Img from '../components/image';
-import Reset from '../components/reset';
+import Button from '../components/button';
 
 /* eslint-disable no-unused-expressions */
 injectGlobal`
@@ -26,12 +27,14 @@ injectGlobal`
 
 type State = {
     blur: number,
-    imageData: ?string,
+    originalImage: ?string,
+    canvas: ?HTMLCanvasElement,
 };
 
 const defaultState: State = {
     blur: 5,
-    imageData: undefined,
+    originalImage: undefined,
+    canvas: undefined,
 };
 
 class App extends Component {
@@ -39,6 +42,8 @@ class App extends Component {
     updateBlur: (e: Event) => void;
     getImage: (e: Event) => void;
     reset: (e: Event) => void;
+    download: (e: Event) => void;
+    getCanvas: (canvas: HTMLCanvasElement) => void;
 
     constructor() {
         super();
@@ -48,6 +53,8 @@ class App extends Component {
         this.updateBlur = this.updateBlur.bind(this);
         this.getImage = this.getImage.bind(this);
         this.reset = this.reset.bind(this);
+        this.download = this.download.bind(this);
+        this.getCanvas = this.getCanvas.bind(this);
     }
 
     updateBlur(e: Event): void {
@@ -63,16 +70,16 @@ class App extends Component {
     }
 
     getImage(e: SyntheticInputEvent) {
-        const imageData = new Image();
-        imageData.onload = () => {
+        const originalImage = new Image();
+        originalImage.onload = () => {
             this.setState(state => {
                 return {
                     ...state,
-                    imageData,
+                    originalImage,
                 };
             });
         };
-        imageData.src = URL.createObjectURL(e.target.files[0]);
+        originalImage.src = URL.createObjectURL(e.target.files[0]);
         e.target.value = ''; // Unset the file input
     }
 
@@ -82,15 +89,38 @@ class App extends Component {
         });
     }
 
+    getCanvas(canvas: HTMLCanvasElement) {
+        this.setState(state => ({
+            ...state,
+            canvas,
+        }));
+    }
+
+    download(e: SyntheticInputEvent) {
+        if (this.state.canvas instanceof HTMLCanvasElement) {
+            download(this.state.canvas.toDataURL(), 'blurred.png', 'image/png');
+        } else {
+            console.log("Error, we don't have a canvas element");
+        }
+    }
+
     render() {
-        const { blur, imageData } = this.state;
-        const haveImage = Boolean(imageData);
+        const { blur, originalImage } = this.state;
+        const haveImage = Boolean(originalImage);
         const handleImagePicker = this.getImage;
         const handleUpdatingBlur = this.updateBlur;
         const reset = this.reset;
+        const download = this.download;
+        const getCanvas = this.getCanvas;
         return (
             <div id="innerapp">
-                {haveImage ? <Img src={imageData} blur={blur} /> : undefined}
+                {haveImage
+                    ? <Img
+                          src={originalImage}
+                          blur={blur}
+                          getCanvas={getCanvas}
+                      />
+                    : undefined}
                 <Border>
                     <ImagePicker
                         haveImage={haveImage}
@@ -108,8 +138,15 @@ class App extends Component {
                             aria-hidden={!haveImage}
                             onChange={handleUpdatingBlur}
                         />
-                        {imageData
-                            ? <Reset onClick={reset} />
+                        {originalImage
+                            ? [
+                                  <Button key="cancel-button" onClick={reset}>
+                                      Cancel
+                                  </Button>,
+                                  <Button key="save-button" onClick={download}>
+                                      Save
+                                  </Button>,
+                              ]
                             : undefined}
                     </Controls>
                 </Border>

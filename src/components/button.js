@@ -13,8 +13,4 @@ const Button = styled.button`
     cursor: pointer;
 `;
 
-const Reset = ({ onClick }) => {
-    return <Button onClick={onClick}>Cancel</Button>;
-};
-
-export default Reset;
+export default Button;

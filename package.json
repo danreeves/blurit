@@ -10,7 +10,7 @@
     "dev": "npm run dev:app & npm run dev:client & npm run dev:server",
     "dev:app": "rollup -c rollup/rollup.app.js --environment ENV:development --watch",
     "dev:client": "rollup -c rollup/rollup.client.js --environment ENV:development --watch",
-    "dev:server": "nodemon --watch dist/containers --watch src/server.js --exec 'flow-remove-types src/server.js > dist/server.js && micro dist/server.js -s'"
+    "dev:server": "nodemon --watch dist/containers --watch src/server.js --exec 'flow-remove-types src/server.js > dist/server.js && micro dist/server.js'"
   },
   "repository": {
     "type": "git",
@@ -23,6 +23,7 @@
   },
   "homepage": "https://github.com/danreeves/blurit#readme",
   "dependencies": {
+    "downloadjs": "^1.4.7",
     "micro": "7.3.2",
     "react": "^16.0.0-alpha.11",
     "react-dom": "^16.0.0-alpha.11",
@@ -58,7 +59,6 @@
     "rollup-plugin-uglify": "^1.0.2",
     "rollup-plugin-visualizer": "^0.2.1",
     "rollup-watch": "^3.2.2",
-    "styled-components": "^2.0.0-15",
     "xo": "^0.18.1"
   },
   "xo": {
